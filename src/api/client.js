@@ -1,11 +1,11 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api/v1'
+import { config } from '../config.js'
 
 function getAdminKey() {
   try { return sessionStorage.getItem('adminKey') } catch { return null }
 }
 
 export default async function request(path, { method, body, headers } = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await fetch(`${config.API_BASE}${path}`, {
     method,
     body,
     headers: {
