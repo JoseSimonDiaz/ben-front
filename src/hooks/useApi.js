@@ -6,15 +6,19 @@ export default function useApi(fetchFn, deps = []) {
   const [error, setError] = useState(null)
 
   const load = useCallback(() => {
+    let cancelled = false
+
     setLoading(true)
     setError(null)
     fetchFn()
-      .then(setData)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false))
+      .then((result) => { if (!cancelled) setData(result) })
+      .catch((e) => { if (!cancelled) setError(e.message) })
+      .finally(() => { if (!cancelled) setLoading(false) })
+
+    return () => { cancelled = true }
   }, deps)
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => { const cleanup = load(); return cleanup }, [load])
 
   return { data, loading, error, refetch: load }
 }

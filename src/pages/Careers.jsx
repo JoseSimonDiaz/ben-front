@@ -11,7 +11,6 @@ function filterCareers(careers, filterValue, searchTerm, result, index = 0) {
   const matchesDuration = !filterValue || (filterValue === 'corta' ? isShortCareer(career.durationYears) : !isShortCareer(career.durationYears))
   const matchesSearch = !searchTerm
     || career.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    || (career.facultyId?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   if (matchesDuration && matchesSearch) result.push(career)
   return filterCareers(careers, filterValue, searchTerm, result, index + 1)
 }
@@ -62,7 +61,6 @@ function CareerCards({ careers, index }) {
         )}
       </div>
       <h3 className="text-base font-bold mb-1 group-hover:text-primary transition-colors">{career.name}</h3>
-      <p className="text-xs text-on-surface-variant mb-2">{career.facultyId?.name || ''}</p>
       {career.description && <p className="text-sm text-on-surface-variant leading-relaxed">{career.description}</p>}
       <div className="flex items-center gap-2 mt-4 text-xs text-on-surface-variant">
         <span className="material-symbols-outlined text-sm">schedule</span>
