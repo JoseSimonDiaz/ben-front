@@ -31,6 +31,8 @@ function StarRating({ value, onChange }) {
         <button
           type="button"
           onClick={() => onChange(starIndex)}
+          aria-label={`Calificar con ${starIndex} de 5 estrellas`}
+          aria-pressed={filled}
           className={`text-2xl transition-all active:scale-90 cursor-pointer ${filled ? 'text-amber-400' : 'text-outline-variant'}`}
         >
           {filled ? '★' : '☆'}
@@ -56,6 +58,7 @@ function RadioGroup({ name, options, value, onChange }) {
         <button
           type="button"
           onClick={() => onChange(opt.value)}
+          aria-pressed={selected}
           className={`flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all cursor-pointer ${
             selected
               ? 'border-primary bg-primary/10 text-primary'
@@ -69,7 +72,7 @@ function RadioGroup({ name, options, value, onChange }) {
     )
   }
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-col sm:flex-row gap-3">
       <OptionItem items={options} itemIndex={0} />
     </div>
   )
@@ -92,11 +95,12 @@ function CheckboxGroup({ options, selected, onChange, max }) {
               onChange([...selected, opt.value])
             }
           }}
+          aria-pressed={checked}
           className={`w-full text-left rounded-xl border px-4 py-3 text-sm font-medium transition-all cursor-pointer ${
-            checked
-              ? 'border-primary bg-primary/10 text-primary'
+              checked
+                ? 'border-primary bg-primary/10 text-primary'
               : atLimit
-                ? 'border-outline-variant/30 opacity-40 cursor-not-allowed'
+                  ? 'border-outline-variant/30 opacity-40 cursor-not-allowed'
                 : 'border-outline-variant/30 bg-surface-container hover:border-primary/40'
           }`}
         >
@@ -134,6 +138,8 @@ const skillsOptions = [
   { value: 'Atención al detalle', label: 'Atención al detalle' },
   { value: 'Habilidades manuales', label: 'Habilidades manuales' },
 ]
+
+const stepLabels = ['Datos del egresado', 'Experiencia en la carrera', 'Balance general']
 
 export default function Experience() {
   const [step, setStep] = useState(1)
@@ -182,23 +188,41 @@ export default function Experience() {
     }
   )
 
+  const progress = Math.round((step / stepLabels.length) * 100)
+
   if (sent) {
     return (
-      <div className="mx-auto max-w-lg px-margin-mobile pt-24 pb-28 text-center animate-scale-in">
-        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-lg animate-scale-in">
-          <span className="material-symbols-outlined text-5xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+      <div className="mx-auto w-full max-w-3xl px-margin-mobile pt-24 pb-28 animate-scale-in">
+        <div className="glass-panel rounded-3xl border border-primary/20 px-5 py-8 sm:px-10 sm:py-12 text-center">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 sm:mb-lg animate-scale-in">
+            <span className="material-symbols-outlined text-5xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+          </div>
+          <h2 className="font-headline-lg-mobile sm:font-headline-lg text-headline-lg-mobile sm:text-headline-lg mb-3">
+            ¡Gracias por compartir!
+          </h2>
+          <p className="text-on-surface-variant text-body-md leading-7 w-full max-w-[42rem] mx-auto mb-3">
+            Tu experiencia ayuda a futuros estudiantes a tomar mejores decisiones sobre su carrera.
+          </p>
+          <p className="text-body-sm text-on-surface-variant w-full max-w-[42rem] mx-auto">
+            Los testimonios serán revisados y publicados pronto.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3">
+            <Link to={ROUTES.HOME}>
+              <Button className="w-full sm:w-auto">Volver al inicio</Button>
+            </Link>
+            <Link to={ROUTES.CAREERS}>
+              <Button variant="secondary" className="w-full sm:w-auto">Explorar carreras</Button>
+            </Link>
+          </div>
         </div>
-        <h2 className="font-headline-lg text-headline-lg mb-2">¡Gracias por compartir!</h2>
-        <p className="text-on-surface-variant mb-2">Tu experiencia ayuda a futuros estudiantes a decidir mejor su carrera.</p>
-        <p className="text-sm text-on-surface-variant mb-lg">Los testimonios serán revisados y publicados pronto.</p>
-        <Link to={ROUTES.HOME}><Button>Volver al inicio</Button></Link>
       </div>
     )
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-margin-mobile pt-24 pb-28">
-      <div className="text-center mb-xl animate-fade-up">
+    <div className="mx-auto max-w-4xl px-margin-mobile pt-24 pb-28">
+      <div className="text-center mb-xl animate-fade-up max-w-2xl mx-auto">
         <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
           <span className="material-symbols-outlined text-3xl">forum</span>
         </div>
@@ -206,16 +230,23 @@ export default function Experience() {
         <p className="text-on-surface-variant">Ayudá a quienes están por elegir su carrera con tu testimonio real.</p>
       </div>
 
-      <div className="flex justify-center gap-2 mb-xl">
-        <div className={`w-20 h-1.5 rounded-full transition-colors ${step >= 1 ? 'bg-primary' : 'bg-outline-variant'}`} />
-        <div className={`w-20 h-1.5 rounded-full transition-colors ${step >= 2 ? 'bg-primary' : 'bg-outline-variant'}`} />
-        <div className={`w-20 h-1.5 rounded-full transition-colors ${step >= 3 ? 'bg-primary' : 'bg-outline-variant'}`} />
+      <div className="glass-panel rounded-2xl border border-outline-variant/30 p-4 sm:p-5 mb-xl">
+        <div className="flex items-center justify-between mb-3 text-xs sm:text-sm text-on-surface-variant">
+          <span>Paso {step} de {stepLabels.length}</span>
+          <span>{progress}% completado</span>
+        </div>
+        <div className="flex justify-center gap-2 mb-3">
+          <div className={`w-20 h-1.5 rounded-full transition-colors ${step >= 1 ? 'bg-primary' : 'bg-outline-variant'}`} />
+          <div className={`w-20 h-1.5 rounded-full transition-colors ${step >= 2 ? 'bg-primary' : 'bg-outline-variant'}`} />
+          <div className={`w-20 h-1.5 rounded-full transition-colors ${step >= 3 ? 'bg-primary' : 'bg-outline-variant'}`} />
+        </div>
+        <p className="text-sm text-on-surface text-center font-medium">{stepLabels[step - 1]}</p>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
         {step === 1 && (
           <div className="space-y-5 animate-fade-up">
-            <div className="glass-panel rounded-2xl p-lg">
+            <div className="glass-panel rounded-3xl border border-outline-variant/30 p-lg">
               <h2 className="font-headline-lg-mobile font-bold mb-lg">Datos del egresado</h2>
 
               <div className="space-y-5">
@@ -261,7 +292,7 @@ export default function Experience() {
 
         {step === 2 && (
           <div className="space-y-5 animate-fade-up">
-            <div className="glass-panel rounded-2xl p-lg">
+            <div className="glass-panel rounded-3xl border border-outline-variant/30 p-lg">
               <h2 className="font-headline-lg-mobile font-bold mb-lg">Tu experiencia en la carrera</h2>
 
               <div className="mb-6">
@@ -368,7 +399,7 @@ export default function Experience() {
 
         {step === 3 && (
           <div className="space-y-5 animate-fade-up">
-            <div className="glass-panel rounded-2xl p-lg">
+            <div className="glass-panel rounded-3xl border border-outline-variant/30 p-lg">
               <h2 className="font-headline-lg-mobile font-bold mb-lg">Balance general</h2>
 
               <div className="mb-6">
