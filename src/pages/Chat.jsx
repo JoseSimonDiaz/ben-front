@@ -4,7 +4,7 @@ import { sendChatMessage } from '../api/index.js'
 import { ROUTES, careerDetail } from '../constants/routes.js'
 
 const initialMessages = [
-  { role: 'assistant', text: 'Hola. Soy Ben, tu asistente vocacional. Puedo ayudarte a explorar carreras, contarte sobre facultades, mostrarte estadísticas y experiencias de egresados. ¿Por dónde querés empezar?' },
+  { role: 'assistant', text: 'Hola. Soy Ben, tu asistente vocacional. Puedo ayudarte a explorar carreras, mostrarte estadísticas y experiencias de egresados. ¿Por dónde querés empezar?' },
 ]
 
 function MessageList({ messages, index }) {

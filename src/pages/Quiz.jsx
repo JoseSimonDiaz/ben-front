@@ -145,7 +145,7 @@ export default function Quiz() {
         </span>
 
         <h2 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mt-sm mb-lg leading-relaxed">
-          {q.text}
+          {q.questionText}
         </h2>
 
         <div className="flex flex-col gap-3">

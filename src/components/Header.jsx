@@ -5,6 +5,7 @@ const links = [
   { to: ROUTES.HOME, label: 'Home', icon: 'home' },
   { to: ROUTES.QUIZ, label: 'Quiz', icon: 'quiz' },
   { to: ROUTES.CHAT, label: 'AI Chat', icon: 'smart_toy' },
+  { to: ROUTES.EXPERIENCE, label: 'Experiencia', icon: 'forum' },
   { to: ROUTES.CAREERS, label: 'Explore', icon: 'explore' },
 ]
 
